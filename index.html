@@ -7,9 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #050505; color: #fff; font-family: sans-serif; }
-        .movie-card:active { transform: scale(0.95); transition: 0.2s; }
+        body { background-color: #050505; color: #fff; font-family: sans-serif; overflow-x: hidden; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .movie-card:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="pb-24">
@@ -18,21 +18,21 @@
         <h1 class="text-red-600 text-3xl font-black italic tracking-tighter" onclick="location.reload()">MOVIEFLIX</h1>
         <div class="flex gap-5 text-xl">
             <i class="fas fa-search" onclick="let s=prompt('Enter Movie Name:'); if(s) alert('Searching for: ' + s)"></i>
-            <i class="fas fa-user-circle" onclick="alert('Profile: Sher Amin Khan\nStatus: Premium User')"></i>
+            <i class="fas fa-bell" onclick="alert('No new notifications')"></i>
         </div>
     </div>
 
-    <div class="relative w-full h-[50vh]">
+    <div class="relative w-full h-[55vh]">
         <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover opacity-60">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent p-6 flex flex-col justify-end">
-            <h2 class="text-4xl font-bold mb-1">New Release</h2>
-            <p class="text-gray-400 text-sm mb-4">Action • Adventure • 2026</p>
+        <div class="absolute inset-0 bg-gradient-to-t from-black flex flex-col justify-end p-6">
+            <h2 class="text-4xl font-bold mb-1">New Journey</h2>
+            <p class="text-gray-400 text-sm mb-4 italic">Sher Amin Khan Pro Production</p>
             <div class="flex gap-4">
-                <button onclick="alert('Video Player Starting...')" class="flex-1 bg-white text-black py-3 rounded-lg font-bold flex items-center justify-center gap-2">
-                    <i class="fas fa-play"></i> Play Now
+                <button onclick="alert('Buffering Movie... Please wait')" class="flex-1 bg-white text-black py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                    <i class="fas fa-play"></i> PLAY
                 </button>
-                <button onclick="alert('Saved to My List!')" class="flex-1 bg-gray-800 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 border border-gray-600">
-                    <i class="fas fa-plus"></i> My List
+                <button onclick="alert('Added to My List')" class="flex-1 bg-gray-800 text-white py-3 rounded-lg font-bold border border-gray-600 flex items-center justify-center gap-2">
+                    <i class="fas fa-plus"></i> MY LIST
                 </button>
             </div>
         </div>
@@ -43,17 +43,11 @@
             <span class="w-1 h-5 bg-red-600 rounded-full"></span> Trending Now
         </h3>
         <div class="flex gap-3 overflow-x-auto no-scrollbar">
-            <div onclick="alert('Loading Movie 1...')" class="min-w-[140px] movie-card">
-                <div class="h-48 bg-gray-900 rounded-xl overflow-hidden border border-gray-800 shadow-lg">
-                    <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover">
-                </div>
-                <p class="text-xs mt-2 text-gray-400">Action Movie 1</p>
+            <div onclick="alert('Loading Video...')" class="min-w-[140px] movie-card h-48 bg-gray-900 rounded-xl overflow-hidden border border-gray-800">
+                <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover">
             </div>
-            <div onclick="alert('Loading Movie 2...')" class="min-w-[140px] movie-card">
-                <div class="h-48 bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="w-full h-full object-cover">
-                </div>
-                <p class="text-xs mt-2 text-gray-400">Sci-Fi Movie 2</p>
+            <div onclick="alert('Loading Video...')" class="min-w-[140px] movie-card h-48 bg-gray-900 rounded-xl overflow-hidden border border-gray-800">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="w-full h-full object-cover">
             </div>
         </div>
     </div>
@@ -63,20 +57,20 @@
             <i class="fas fa-home text-xl"></i>
             <span class="text-[10px] mt-1 font-bold">Home</span>
         </div>
-        <div onclick="alert('Downloads empty!')" class="text-gray-500 flex flex-col items-center">
-            <i class="fas fa-download text-xl"></i>
-            <span class="text-[10px] mt-1">Downloads</span>
+        <div onclick="alert('Shorts Coming Soon')" class="text-gray-500 flex flex-col items-center">
+            <i class="fas fa-play-circle text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Shorts</span>
         </div>
-        <div onclick="alert('Upload System Ready')" class="bg-red-600 text-white h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black shadow-xl">
+        <div onclick="alert('Select Video to Upload')" class="bg-red-600 text-white h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black shadow-xl">
             <i class="fas fa-plus text-lg"></i>
         </div>
-        <div onclick="alert('Shorts Feature coming soon!')" class="text-gray-500 flex flex-col items-center">
-            <i class="fas fa-play-circle text-xl"></i>
-            <span class="text-[10px] mt-1">Shorts</span>
+        <div onclick="alert('Opening Downloads')" class="text-gray-500 flex flex-col items-center">
+            <i class="fas fa-download text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Download</span>
         </div>
-        <div onclick="alert('Settings Menu')" class="text-gray-500 flex flex-col items-center">
-            <i class="fas fa-cog text-xl"></i>
-            <span class="text-[10px] mt-1">Settings</span>
+        <div onclick="alert('Profile: Sher Amin Khan')" class="text-gray-500 flex flex-col items-center">
+            <i class="fas fa-user-circle text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold">Profile</span>
         </div>
     </div>
 
