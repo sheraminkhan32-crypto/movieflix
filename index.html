@@ -3,61 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieFlix Pro - Sher Amin Khan</title>
+    <title>MovieFlix Pro - Sher Amin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background-color: #050505; color: #fff; font-family: sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body class="pb-24">
-    <div class="p-4 flex justify-between items-center sticky top-0 bg-black/95 z-50 border-b border-gray-900">
+
+    <div class="p-4 flex justify-between items-center sticky top-0 bg-black z-50 border-b border-gray-900">
         <h1 class="text-red-600 text-3xl font-black italic tracking-tighter">MOVIEFLIX</h1>
-        <i class="fas fa-search text-xl" onclick="alert('Search Open')"></i>
+        <i class="fas fa-search text-xl" onclick="toggleSearch()"></i>
     </div>
 
-    <div class="p-6 bg-gradient-to-b from-gray-900 to-black rounded-b-[40px] border-b border-gray-800">
-        <div class="flex flex-col items-center">
-            <div class="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-gray-800 shadow-xl mb-3">S</div>
-            <h2 class="text-2xl font-bold">Sher Amin Khan</h2>
-            <p class="text-gray-400 text-sm">@sheramin_pro • Premium User</p>
-        </div>
+    <div id="searchBar" class="hidden p-4 bg-gray-900 sticky top-[73px] z-40">
+        <input type="text" id="searchInput" onkeyup="filterMovies()" placeholder="Search movies..." class="w-full bg-black p-3 rounded-lg border border-red-600 outline-none">
+    </div>
 
-        <div class="grid grid-cols-3 gap-4 mt-8">
-            <div onclick="alert('Opening My Channel...')" class="flex flex-col items-center bg-gray-800/50 p-3 rounded-2xl border border-gray-700">
-                <i class="fas fa-tv text-red-500 mb-2"></i>
-                <span class="text-[10px] font-bold uppercase">Channel</span>
-            </div>
-            <div onclick="alert('Opening My Downloads...')" class="flex flex-col items-center bg-gray-800/50 p-3 rounded-2xl border border-gray-700">
-                <i class="fas fa-download text-green-500 mb-2"></i>
-                <span class="text-[10px] font-bold uppercase">Downloads</span>
-            </div>
-            <div onclick="alert('Settings Open')" class="flex flex-col items-center bg-gray-800/50 p-3 rounded-2xl border border-gray-700">
-                <i class="fas fa-cog text-blue-500 mb-2"></i>
-                <span class="text-[10px] font-bold uppercase">Settings</span>
+    <div id="homePage" class="page active p-4 space-y-4">
+        <div id="movieList" class="space-y-4">
+            <div class="movie-item relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-800" onclick="playVideo('https://files.catbox.moe/u08bka.mp4')">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800" class="w-full h-52 object-cover opacity-50">
+                <div class="absolute inset-0 flex items-center justify-center"><i class="fas fa-play-circle text-6xl"></i></div>
+                <div class="p-3 bg-black/60"><h3 class="movie-name font-bold">Sher Amin Special Video</h3></div>
             </div>
         </div>
     </div>
 
-    <div class="p-4">
-        <h3 class="text-lg font-bold mb-4">Continue Watching</h3>
-        <div class="flex gap-4 overflow-x-auto no-scrollbar">
-            <div class="min-w-[160px] h-24 bg-gray-900 rounded-xl border border-gray-800 flex items-center justify-center">
-                <i class="fas fa-play-circle text-gray-700 text-2xl"></i>
-            </div>
-            <div class="min-w-[160px] h-24 bg-gray-900 rounded-xl border border-gray-800 flex items-center justify-center">
-                <i class="fas fa-play-circle text-gray-700 text-2xl"></i>
+    <div id="shortsPage" class="page p-20 text-center">
+        <i class="fas fa-bolt text-5xl text-yellow-500 mb-4"></i><h2 class="text-xl font-bold">Shorts Coming Soon</h2>
+    </div>
+
+    <div id="downloadPage" class="page p-20 text-center">
+        <i class="fas fa-arrow-alt-circle-down text-5xl text-blue-500 mb-4"></i><h2 class="text-xl font-bold">Your Downloads</h2>
+    </div>
+
+    <div id="channelPage" class="page p-10 text-center">
+        <div class="w-24 h-24 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold" id="userInitial">S</div>
+        <h2 class="text-2xl font-bold" id="userNameDisplay">Sher Amin Khan</h2>
+        <p class="text-gray-400 text-sm mb-6">@sheramin_official</p>
+        <button onclick="editProfile()" class="bg-white text-black px-6 py-2 rounded-full font-bold active:bg-gray-300">Edit Profile</button>
+        <div class="mt-10 border-t border-gray-800 pt-4">
+            <h3 class="text-left font-bold mb-2">My Videos</h3>
+            <div class="grid grid-cols-2 gap-2" id="userVideos">
+                <div class="h-20 bg-gray-900 rounded border border-gray-800 flex items-center justify-center text-[10px] text-gray-600">No videos yet</div>
             </div>
         </div>
     </div>
 
-    <div class="fixed bottom-0 w-full bg-black/95 border-t border-gray-900 flex justify-around items-center py-4 z-50">
-        <div onclick="location.reload()" class="text-red-600 flex flex-col items-center"><i class="fas fa-home text-xl"></i><span class="text-[10px] mt-1 font-bold">Home</span></div>
-        <div onclick="alert('Shorts')" class="text-gray-500 flex flex-col items-center"><i class="fas fa-bolt text-xl"></i><span class="text-[10px] mt-1 font-bold">Shorts</span></div>
-        <div onclick="alert('Upload Video')" class="bg-red-600 text-white h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black shadow-xl"><i class="fas fa-plus text-lg"></i></div>
-        <div onclick="alert('Downloads Section')" class="text-gray-500 flex flex-col items-center"><i class="fas fa-download text-xl"></i><span class="text-[10px] mt-1 font-bold">Download</span></div>
-        <div onclick="alert('Profile active')" class="text-gray-500 flex flex-col items-center"><i class="fas fa-user-circle text-xl"></i><span class="text-[10px] mt-1 font-bold">Profile</span></div>
+    <div id="uploadPanel" class="page p-6">
+        <h2 class="text-2xl font-bold mb-6 text-red-600">Upload Center</h2>
+        <input type="text" id="videoUrlInput" placeholder="Paste .mp4 Link" class="w-full bg-black p-3 rounded mb-4 border border-gray-700">
+        <button onclick="addVideoByLink()" class="w-full bg-red-600 py-3 rounded font-bold mb-4">ADD LINK VIDEO</button>
+        <button onclick="document.getElementById('galleryInput').click()" class="w-full bg-blue-600 py-3 rounded font-bold">SELECT FROM GALLERY</button>
+        <input type="file" id="galleryInput" accept="video/*" class="hidden" onchange="addFromGallery()">
     </div>
+
+    <div id="fullPlayer" class="fixed inset-0 bg-black z-[100] hidden flex flex-col">
+        <button onclick="closeVideo()" class="p-4 text-left text-red-600 font-bold text-xl">✕ CLOSE</button>
+        <video id="videoScreen" controls class="w-full my-auto"><source src="" type="video/mp4"></video>
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-black border-t border-gray-900 flex justify-around items-center py-3 z-50">
+        <div onclick="showPage('homePage')" class="flex flex-col items-center text-red-600"><i class="fas fa-home text-xl"></i><span class="text-[10px]">Home</span></div>
+        <div onclick="showPage('shortsPage')" class="flex flex-col items-center text-gray-500"><i class="fas fa-bolt text-xl"></i><span class="text-[10px]">Shorts</span></div>
+        <div onclick="showPage('uploadPanel')" class="bg-red-600 text-white h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black"><i class="fas fa-plus"></i></div>
+        <div onclick="showPage('downloadPage')" class="flex flex-col items-center text-gray-500"><i class="fas fa-download text-xl"></i><span class="text-[10px]">Download</span></div>
+        <div onclick="showPage('channelPage')" class="flex flex-col items-center text-gray-500"><i class="fas fa-user-circle text-xl"></i><span class="text-[10px]">Channel</span></div>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
+        
+        // Fix Edit Profile
+        function editProfile() {
+            let newName = prompt("Enter your new name:", document.getElementById('userNameDisplay').innerText);
+            if(newName) {
+                document.getElementById('userNameDisplay').innerText = newName;
+                document.getElementById('userInitial').innerText = newName.charAt(0).toUpperCase();
+                alert("Profile Updated!");
+            }
+        }
+
+        function playVideo(url) {
+            document.getElementById('videoScreen').src = url;
+            document.getElementById('fullPlayer').classList.remove('hidden');
+            document.getElementById('videoScreen').play();
+        }
+        function closeVideo() {
+            document.getElementById('fullPlayer').classList.add('hidden');
+            document.getElementById('videoScreen').pause();
+        }
+        function addVideoByLink() {
+            let url = document.getElementById('videoUrlInput').value;
+            if(url) { createCard(url, "New Movie"); showPage('homePage'); }
+        }
+        function addFromGallery() {
+            let file = document.getElementById('galleryInput').files[0];
+            if(file) { createCard(URL.createObjectURL(file), file.name); showPage('homePage'); }
+        }
+        function createCard(url, name) {
+            let list = document.getElementById('movieList');
+            let div = document.createElement('div');
+            div.className = "movie-item relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-800";
+            div.onclick = () => playVideo(url);
+            div.innerHTML = `<div class="h-40 bg-gray-800 flex items-center justify-center"><i class="fas fa-play text-4xl opacity-30"></i></div>
+                             <div class="p-3 bg-black/60"><h3 class="movie-name font-bold">${name}</h3></div>`;
+            list.prepend(div);
+        }
+    </script>
 </body>
 </html>
