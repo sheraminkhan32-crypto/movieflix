@@ -10,7 +10,7 @@
         body { background-color: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
         .page { display: none; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
         .page.active { display: block; }
-        .active-red { color: #ef4444 !important; }
+        #editNameModal { background: rgba(0,0,0,0.9); }
     </style>
 </head>
 <body>
@@ -21,7 +21,7 @@
     </div>
 
     <div id="searchBar" class="hidden p-4 bg-gray-900 sticky top-[73px] z-40">
-        <input type="text" id="searchInput" onkeyup="realSearch()" placeholder="Search Movie or Channel Name..." class="w-full bg-black p-3 rounded-lg border border-red-600 outline-none">
+        <input type="text" id="searchInput" onkeyup="realSearch()" placeholder="Search..." class="w-full bg-black p-3 rounded-lg border border-red-600 outline-none">
     </div>
 
     <div id="homePage" class="page active p-4 space-y-6">
@@ -47,7 +47,7 @@
                     <source src="https://files.catbox.moe/u08bka.mp4" type="video/mp4">
                 </video>
                 <div class="absolute right-4 bottom-32 flex flex-col gap-8 text-3xl text-white items-center">
-                    <i class="fas fa-heart" onclick="this.classList.toggle('active-red')"></i>
+                    <i class="fas fa-heart" onclick="this.classList.toggle('text-red-600')"></i>
                     <i class="fas fa-download text-red-600" onclick="downloadVideo('https://files.catbox.moe/u08bka.mp4')"></i>
                     <i class="fas fa-share" onclick="navigator.share({url: window.location.href})"></i>
                 </div>
@@ -58,22 +58,36 @@
     <div id="uploadPage" class="page p-6">
         <h2 class="text-2xl font-bold mb-6 text-red-600">Upload Content</h2>
         <input type="text" id="vLink" placeholder="Paste .mp4 Link" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none">
-        <input type="text" id="vTitle" placeholder="Video Title / Channel Name" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none">
+        <input type="text" id="vTitle" placeholder="Video Title" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none">
         <button onclick="uploadEverything()" class="w-full bg-red-600 py-4 rounded-xl font-bold">POST TO CHANNEL</button>
     </div>
 
     <div id="channelPage" class="page p-6">
-        <div class="text-center mb-6">
-            <div class="w-20 h-20 bg-red-600 rounded-full mx-auto mb-2 flex items-center justify-center text-3xl font-bold">S</div>
-            <h2 class="text-xl font-bold" id="chanNameDisplay">My Channel</h2>
+        <div class="text-center mb-6 relative">
+            <div class="w-20 h-20 bg-red-600 rounded-full mx-auto mb-2 flex items-center justify-center text-3xl font-bold" id="userInitial">S</div>
+            <div class="flex items-center justify-center gap-2">
+                <h2 class="text-xl font-bold" id="chanNameDisplay">My Channel</h2>
+                <i class="fas fa-pen text-sm text-gray-500" onclick="toggleEditModal()"></i>
+            </div>
         </div>
         <h3 class="font-bold border-b border-gray-800 pb-2 mb-4 text-gray-400">Videos</h3>
         <div id="userVideos" class="grid grid-cols-3 gap-1"></div>
     </div>
 
-    <div id="playerBox" class="fixed inset-0 bg-black z-[100] hidden flex flex-col">
-        <button onclick="closeVideo()" class="p-4 text-red-600 font-bold">✕ CLOSE PLAYER</button>
-        <video id="mainVideo" controls class="w-full my-auto"><source src="" type="video/mp4"></video>
+    <div id="editNameModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6">
+        <div class="bg-gray-900 p-6 rounded-2xl w-full border border-gray-700">
+            <h3 class="text-lg font-bold mb-4">Update Channel Name</h3>
+            <input type="text" id="newNameInput" placeholder="Enter new name" class="w-full bg-black p-3 rounded mb-4 border border-gray-700 outline-none text-white">
+            <div class="flex gap-2">
+                <button onclick="saveNewName()" class="flex-1 bg-red-600 py-2 rounded font-bold">Save</button>
+                <button onclick="toggleEditModal()" class="flex-1 bg-gray-700 py-2 rounded font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="playerBox" class="fixed inset-0 bg-black z-[300] hidden flex flex-col">
+        <button onclick="closeVideo()" class="p-4 text-red-600 font-bold">✕ CLOSE</button>
+        <video id="mainVideo" controls class="w-full my-auto shadow-2xl"><source src="" type="video/mp4"></video>
     </div>
 
     <div class="fixed bottom-0 w-full bg-black border-t border-gray-900 flex justify-around items-center py-4 z-50">
@@ -91,33 +105,25 @@
 
         function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
 
-        function realSearch() {
-            let val = document.getElementById('searchInput').value.toLowerCase();
-            let movies = document.getElementsByClassName('movie-item');
-            for(let m of movies) {
-                let name = m.getAttribute('data-name').toLowerCase();
-                m.style.display = name.includes(val) ? "block" : "none";
+        function toggleEditModal() { document.getElementById('editNameModal').classList.toggle('hidden'); }
+
+        function saveNewName() {
+            let name = document.getElementById('newNameInput').value;
+            if(name) {
+                document.getElementById('chanNameDisplay').innerText = name;
+                document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
+                toggleEditModal();
             }
         }
 
         function downloadVideo(url) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.download = 'movieflix_video.mp4';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            window.open(url, '_blank');
         }
 
         function uploadEverything() {
             let url = document.getElementById('vLink').value;
             let title = document.getElementById('vTitle').value || "New Video";
             if(!url) return;
-
-            document.getElementById('chanNameDisplay').innerText = title;
-
-            // Add to Home
             const movieList = document.getElementById('movieList');
             const card = document.createElement('div');
             card.className = "movie-item bg-gray-900 rounded-2xl overflow-hidden border border-gray-800";
@@ -125,15 +131,13 @@
             card.innerHTML = `<div onclick="playVideo('${url}')"><div class="h-40 bg-gray-800 flex items-center justify-center"><i class="fas fa-play text-3xl"></i></div></div>
                               <div class="p-3 flex justify-between items-center"><span class="font-bold">${title}</span><button onclick="downloadVideo('${url}')" class="text-red-600"><i class="fas fa-download"></i></button></div>`;
             movieList.prepend(card);
-
-            // Add to Channel
             const userVids = document.getElementById('userVideos');
             const thumb = document.createElement('div');
             thumb.className = "h-24 bg-gray-800 rounded flex items-center justify-center border border-gray-700";
             thumb.onclick = () => playVideo(url);
-            thumb.innerHTML = `<i class="fas fa-play opacity-30"></i>`;
+            thumb.innerHTML = `<i class="fas fa-play opacity-20 text-xs"></i>`;
             userVids.prepend(thumb);
-
+            document.getElementById('vLink').value = "";
             showPage('channelPage');
         }
 
@@ -146,6 +150,15 @@
         function closeVideo() {
             document.getElementById('playerBox').classList.add('hidden');
             document.getElementById('mainVideo').pause();
+        }
+
+        function realSearch() {
+            let val = document.getElementById('searchInput').value.toLowerCase();
+            let movies = document.getElementsByClassName('movie-item');
+            for(let m of movies) {
+                let name = m.getAttribute('data-name').toLowerCase();
+                m.style.display = name.includes(val) ? "block" : "none";
+            }
         }
     </script>
 </body>
