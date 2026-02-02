@@ -42,15 +42,18 @@
     </div>
 
     <div id="channelPage" class="page p-10 text-center">
-        <div class="w-24 h-24 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold" id="userInitial">S</div>
+        <div class="w-24 h-24 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold shadow-lg" id="userInitial">S</div>
         <h2 class="text-2xl font-bold" id="userNameDisplay">Sher Amin Khan</h2>
         <p class="text-gray-400 text-sm mb-6">@sheramin_official</p>
-        <button onclick="editProfile()" class="bg-white text-black px-6 py-2 rounded-full font-bold active:bg-gray-300">Edit Profile</button>
-        <div class="mt-10 border-t border-gray-800 pt-4">
-            <h3 class="text-left font-bold mb-2">My Videos</h3>
-            <div class="grid grid-cols-2 gap-2" id="userVideos">
-                <div class="h-20 bg-gray-900 rounded border border-gray-800 flex items-center justify-center text-[10px] text-gray-600">No videos yet</div>
-            </div>
+        <button onclick="toggleEditModal()" class="bg-white text-black px-6 py-2 rounded-full font-bold">Edit Profile</button>
+    </div>
+
+    <div id="editModal" class="fixed inset-0 bg-black/90 z-[300] hidden p-10">
+        <h2 class="text-xl font-bold mb-4">Edit Your Name</h2>
+        <input type="text" id="newNameInput" class="w-full bg-gray-900 p-3 rounded border border-gray-700 mb-4" placeholder="Enter Name">
+        <div class="flex gap-2">
+            <button onclick="saveProfile()" class="flex-1 bg-red-600 py-2 rounded font-bold">Save</button>
+            <button onclick="toggleEditModal()" class="flex-1 bg-gray-700 py-2 rounded font-bold">Cancel</button>
         </div>
     </div>
 
@@ -82,13 +85,15 @@
         }
         function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
         
-        // Fix Edit Profile
-        function editProfile() {
-            let newName = prompt("Enter your new name:", document.getElementById('userNameDisplay').innerText);
-            if(newName) {
-                document.getElementById('userNameDisplay').innerText = newName;
-                document.getElementById('userInitial').innerText = newName.charAt(0).toUpperCase();
-                alert("Profile Updated!");
+        // Modal Functions (No Alerts)
+        function toggleEditModal() { document.getElementById('editModal').classList.toggle('hidden'); }
+        
+        function saveProfile() {
+            let name = document.getElementById('newNameInput').value;
+            if(name) {
+                document.getElementById('userNameDisplay').innerText = name;
+                document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
+                toggleEditModal();
             }
         }
 
