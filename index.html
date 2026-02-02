@@ -7,70 +7,76 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #050505; color: #fff; font-family: sans-serif; overflow-x: hidden; }
+        body { background-color: #050505; color: #fff; font-family: sans-serif; }
+        .movie-card:active { transform: scale(0.95); transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body class="pb-24">
 
-    <div class="p-4 flex justify-between items-center sticky top-0 bg-black z-50 border-b border-gray-900">
-        <h1 class="text-red-600 text-3xl font-extrabold tracking-tighter" onclick="location.reload()">MOVIEFLIX</h1>
-        <div class="flex gap-4 text-xl">
-            <i class="fas fa-search cursor-pointer" onclick="alert('Search: Type movie name...')"></i>
-            <i class="fas fa-bell cursor-pointer" onclick="alert('No new notifications')"></i>
+    <div class="p-4 flex justify-between items-center sticky top-0 bg-black/90 backdrop-blur-md z-50 border-b border-gray-900">
+        <h1 class="text-red-600 text-3xl font-black italic tracking-tighter" onclick="location.reload()">MOVIEFLIX</h1>
+        <div class="flex gap-5 text-xl">
+            <i class="fas fa-search" onclick="let s=prompt('Enter Movie Name:'); if(s) alert('Searching for: ' + s)"></i>
+            <i class="fas fa-user-circle" onclick="alert('Profile: Sher Amin Khan\nStatus: Premium User')"></i>
         </div>
     </div>
 
-    <div class="relative h-[55vh] w-full">
-        <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover opacity-70">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-6">
-            <h2 class="text-4xl font-bold mb-1">The New Journey</h2>
-            <p class="text-gray-300 text-sm mb-4">Trending #1 in Pakistan</p>
-            <div class="flex gap-3">
-                <button onclick="alert('Starting Movie Player...')" class="bg-white text-black px-8 py-2 rounded-md font-bold hover:bg-gray-200 transition">
-                    <i class="fas fa-play mr-2"></i> Play
+    <div class="relative w-full h-[50vh]">
+        <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent p-6 flex flex-col justify-end">
+            <h2 class="text-4xl font-bold mb-1">New Release</h2>
+            <p class="text-gray-400 text-sm mb-4">Action • Adventure • 2026</p>
+            <div class="flex gap-4">
+                <button onclick="alert('Video Player Starting...')" class="flex-1 bg-white text-black py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                    <i class="fas fa-play"></i> Play Now
                 </button>
-                <button onclick="alert('Added to My List!')" class="bg-gray-700/80 text-white px-6 py-2 rounded-md font-bold">
-                    <i class="fas fa-plus mr-2"></i> List
+                <button onclick="alert('Saved to My List!')" class="flex-1 bg-gray-800 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 border border-gray-600">
+                    <i class="fas fa-plus"></i> My List
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="px-4 py-6">
-        <h3 class="text-lg font-bold mb-4">Trending Now</h3>
+    <div class="p-4">
+        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+            <span class="w-1 h-5 bg-red-600 rounded-full"></span> Trending Now
+        </h3>
         <div class="flex gap-3 overflow-x-auto no-scrollbar">
-            <div onclick="alert('Loading Movie...')" class="min-w-[130px] h-44 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex-shrink-0">
-                <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover">
+            <div onclick="alert('Loading Movie 1...')" class="min-w-[140px] movie-card">
+                <div class="h-48 bg-gray-900 rounded-xl overflow-hidden border border-gray-800 shadow-lg">
+                    <img src="https://files.catbox.moe/p949as.jpg" class="w-full h-full object-cover">
+                </div>
+                <p class="text-xs mt-2 text-gray-400">Action Movie 1</p>
             </div>
-            <div onclick="alert('Loading Movie...')" class="min-w-[130px] h-44 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex-shrink-0">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="w-full h-full object-cover">
-            </div>
-            <div onclick="alert('Loading Movie...')" class="min-w-[130px] h-44 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex-shrink-0">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400" class="w-full h-full object-cover">
+            <div onclick="alert('Loading Movie 2...')" class="min-w-[140px] movie-card">
+                <div class="h-48 bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="w-full h-full object-cover">
+                </div>
+                <p class="text-xs mt-2 text-gray-400">Sci-Fi Movie 2</p>
             </div>
         </div>
     </div>
 
-    <div class="fixed bottom-0 w-full bg-black/95 border-t border-gray-800 flex justify-around items-center py-3 z-50">
-        <div onclick="location.reload()" class="flex flex-col items-center text-red-600 cursor-pointer">
+    <div class="fixed bottom-0 w-full bg-black/95 border-t border-gray-900 flex justify-around items-center py-4 z-50">
+        <div onclick="location.reload()" class="text-red-600 flex flex-col items-center">
             <i class="fas fa-home text-xl"></i>
-            <span class="text-[10px] mt-1">Home</span>
+            <span class="text-[10px] mt-1 font-bold">Home</span>
         </div>
-        <div onclick="alert('Shorts Feature Coming Soon')" class="flex flex-col items-center text-gray-500 cursor-pointer">
-            <i class="fas fa-play-circle text-xl"></i>
-            <span class="text-[10px] mt-1">Shorts</span>
-        </div>
-        <div onclick="alert('Upload System: Select File')" class="bg-white text-black h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black shadow-lg cursor-pointer">
-            <i class="fas fa-plus text-lg"></i>
-        </div>
-        <div onclick="alert('Opening Downloads...')" class="flex flex-col items-center text-gray-500 cursor-pointer">
+        <div onclick="alert('Downloads empty!')" class="text-gray-500 flex flex-col items-center">
             <i class="fas fa-download text-xl"></i>
             <span class="text-[10px] mt-1">Downloads</span>
         </div>
-        <div onclick="alert('Profile Settings')" class="flex flex-col items-center text-gray-500 cursor-pointer">
-            <i class="fas fa-user-circle text-xl"></i>
-            <span class="text-[10px] mt-1">Profile</span>
+        <div onclick="alert('Upload System Ready')" class="bg-red-600 text-white h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black shadow-xl">
+            <i class="fas fa-plus text-lg"></i>
+        </div>
+        <div onclick="alert('Shorts Feature coming soon!')" class="text-gray-500 flex flex-col items-center">
+            <i class="fas fa-play-circle text-xl"></i>
+            <span class="text-[10px] mt-1">Shorts</span>
+        </div>
+        <div onclick="alert('Settings Menu')" class="text-gray-500 flex flex-col items-center">
+            <i class="fas fa-cog text-xl"></i>
+            <span class="text-[10px] mt-1">Settings</span>
         </div>
     </div>
 
