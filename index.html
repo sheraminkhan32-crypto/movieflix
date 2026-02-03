@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieFlix Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+        .page { display: none; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
+        .page.active { display: block; }
+        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        #commentSheet { transition: transform 0.3s ease-in-out; transform: translateY(100%); }
+        #commentSheet.open { transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <h1 class="text-red-600 text-5xl font-black italic mb-4">MOVIEFLIX</h1>
+        <div class="w-32 h-1 bg-gray-800 relative overflow-hidden"><div class="absolute h-full bg-red-600 w-1/2 animate-[load_1.5s_infinite]"></div></div>
+        <style>@keyframes load { 0% { left: -100%; } 100% { left: 100%; } }</style>
+    </div>
+
+    <div class="p-4 flex justify-between items-center sticky top-0 bg-black z-50 border-b border-gray-900">
+        <h1 class="text-red-600 text-3xl font-black italic">MOVIEFLIX</h1>
+        <i class="fas fa-search text-xl" onclick="toggleSearch()"></i>
+    </div>
+
+    <div id="searchBar" class="hidden p-4 bg-gray-900 sticky top-[73px] z-40">
+        <input type="text" id="searchInput" onkeyup="realSearch()" placeholder="Search videos..." class="w-full bg-black p-3 rounded-lg border border-red-600 outline-none text-white">
+    </div>
+
+    <div id="homePage" class="page active p-4 space-y-6">
+        <div id="movieList" class="space-y-6">
+            <div class="movie-item bg-gray-900 rounded-2xl overflow-hidden border border-gray-800" data-name="Sher Amin Action">
+                <div onclick="playVideo('https://files.catbox.moe/u08bka.mp4')"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800" class="w-full h-48 object-cover opacity-60"></div>
+                <div class="p-4 flex justify-between items-center">
+                    <h3 class="movie-title font-bold text-lg">Sher Amin Action</h3>
+                    <button onclick="downloadVideo('https://files.catbox.moe/u08bka.mp4')" class="bg-red-600 px-4 py-2 rounded-full text-white text-sm font-bold">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="shortsPage" class="page bg-black !p-0">
+        <div id="shortsList" class="h-full relative">
+            <video loop id="shortVideo" class="h-full w-full object-cover" onclick="this.paused ? this.play() : this.pause()">
+                <source src="https://files.catbox.moe/u08bka.mp4" type="video/mp4">
+            </video>
+            <div class="absolute right-4 bottom-36 flex flex-col gap-6 text-2xl text-white items-center">
+                <div class="flex flex-col items-center"><i class="fas fa-thumbs-up p-3 bg-black/40 rounded-full" onclick="this.classList.toggle('text-red-600')"></i><span class="text-xs mt-1">Like</span></div>
+                <div class="flex flex-col items-center"><i class="fas fa-comment p-3 bg-black/40 rounded-full" onclick="toggleComments()"></i><span class="text-xs mt-1">702</span></div>
+                <div class="flex flex-col items-center"><i class="fas fa-share p-3 bg-black/40 rounded-full" onclick="shareApp()"></i><span class="text-xs mt-1">Share</span></div>
+                <div class="flex flex-col items-center"><i class="fas fa-download p-3 bg-red-600 rounded-full" onclick="downloadVideo('https://files.catbox.moe/u08bka.mp4')"></i><span class="text-xs mt-1 font-bold">Save</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="commentSheet" class="fixed bottom-0 left-0 w-full bg-gray-900 rounded-t-3xl z-[400] p-6 h-[60vh] flex flex-col shadow-2xl">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-xl text-red-600">Comments</h3>
+            <i class="fas fa-times text-xl" onclick="toggleComments()"></i>
+        </div>
+        <div class="flex-1 overflow-y-auto space-y-4 mb-4 text-sm text-gray-300">
+            <p><b>Ali:</b> Wah bhai kya action hai!</p>
+            <p><b>Zain:</b> Best video on MovieFlix.</p>
+        </div>
+        <div class="flex gap-2">
+            <input type="text" placeholder="Add a comment..." class="flex-1 bg-black p-3 rounded-lg border border-gray-700 outline-none">
+            <button class="bg-red-600 px-4 rounded-lg"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div id="uploadPage" class="page p-6">
+        <h2 class="text-xl font-bold mb-4">Post Video</h2>
+        <input type="text" id="vLink" placeholder="Video Link (.mp4)" class="w-full bg-gray-900 p-4 rounded-xl mb-4 text-white outline-none border border-gray-800">
+        <input type="text" id="vTitle" placeholder="Video Title" class="w-full bg-gray-900 p-4 rounded-xl mb-4 text-white outline-none border border-gray-800">
+        <button onclick="uploadEverything()" class="w-full bg-red-600 py-4 rounded-xl font-bold">POST</button>
+    </div>
+
+    <div id="channelPage" class="page p-6 text-center">
+        <div class="w-24 h-24 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold" id="userInitial">S</div>
+        <div class="flex items-center justify-center gap-2">
+            <h2 class="text-2xl font-bold" id="chanNameDisplay">Sher Amin</h2>
+            <i class="fas fa-pen text-gray-500" onclick="editName()"></i>
+        </div>
+        <div id="userVideos" class="grid grid-cols-3 gap-1 mt-6"></div>
+    </div>
+
+    <div id="playerBox" class="fixed inset-0 bg-black z-[300] hidden flex flex-col">
+        <button onclick="closeVideo()" class="p-6 text-red-600 font-bold text-left">✕ CLOSE</button>
+        <video id="mainVideo" controls class="w-full my-auto"></video>
+    </div>
+
+    <div class="fixed bottom-0 w-full bg-black border-t border-gray-900 flex justify-around items-center py-4 z-50">
+        <div onclick="showPage('homePage')"><i class="fas fa-home text-xl"></i></div>
+        <div onclick="showPage('shortsPage')"><i class="fas fa-bolt text-xl"></i></div>
+        <div onclick="showPage('uploadPage')" class="bg-red-600 h-12 w-12 rounded-full flex items-center justify-center -mt-10 border-4 border-black"><i class="fas fa-plus"></i></div>
+        <div onclick="showPage('channelPage')"><i class="fas fa-user-circle text-xl"></i></div>
+    </div>
+
+    <script>
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            const sv = document.getElementById('shortVideo');
+            id === 'shortsPage' ? sv.play() : sv.pause();
+        }
+
+        function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
+
+        // --- REAL SEARCH FUNCTION FIXED ---
+        function realSearch() {
+            let val = document.getElementById('searchInput').value.toLowerCase();
+            let movies = document.getElementsByClassName('movie-item');
+            for(let m of movies) {
+                let name = m.getAttribute('data-name').toLowerCase();
+                if(name.includes(val)) {
+                    m.style.display = "block";
+                } else {
+                    m.style.display = "none";
+                }
+            }
+        }
+
+        function toggleComments() { document.getElementById('commentSheet').classList.toggle('open'); }
+
+        async function shareApp() {
+            try {
+                await navigator.share({ title: 'MovieFlix', text: 'Check this out!', url: window.location.href });
+            } catch (err) {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied!");
+            }
+        }
+
+        function uploadEverything() {
+            let url = document.getElementById('vLink').value;
+            let title = document.getElementById('vTitle').value || "New Video";
+            if(!url) return;
+            const movieList = document.getElementById('movieList');
+            const card = document.createElement('div');
+            card.className = "movie-item bg-gray-900 rounded-2xl overflow-hidden border border-gray-800";
+            card.setAttribute('data-name', title);
+            card.innerHTML = `<div onclick="playVideo('${url}')"><div class="h-40 bg-gray-800 flex items-center justify-center"><i class="fas fa-play text-3xl"></i></div></div>
+                              <div class="p-4 flex justify-between items-center"><h3 class="font-bold">${title}</h3><button onclick="downloadVideo('${url}')" class="text-red-600"><i class="fas fa-download"></i></button></div>`;
+            movieList.prepend(card);
+            document.getElementById('vLink').value = "";
+            showPage('homePage');
+        }
+
+        function downloadVideo(url) { window.open(url, '_blank'); }
+        function editName() { let n = prompt("New Name:"); if(n){ document.getElementById('chanNameDisplay').innerText=n; document.getElementById('userInitial').innerText=n[0].toUpperCase(); } }
+        function playVideo(url) { document.getElementById('mainVideo').src = url; document.getElementById('playerBox').classList.remove('hidden'); document.getElementById('mainVideo').play(); }
+        function closeVideo() { document.getElementById('playerBox').classList.add('hidden'); document.getElementById('mainVideo').pause(); }
+    </script>
+</body>
+</html>
