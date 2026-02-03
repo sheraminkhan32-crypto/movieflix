@@ -10,10 +10,28 @@
         body { background-color: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
         .page { display: none; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
         .page.active { display: block; }
-        #editNameModal { background: rgba(0,0,0,0.9); }
+        /* Splash Screen Style */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
+
+    <div id="splash">
+        <h1 class="text-red-600 text-5xl font-black italic mb-4">MOVIEFLIX</h1>
+        <div class="w-32 h-1 bg-gray-800 relative overflow-hidden">
+            <div class="absolute h-full bg-red-600 w-1/2 animate-[load_1.5s_infinite]"></div>
+        </div>
+        <style>@keyframes load { 0% { left: -100%; } 100% { left: 100%; } }</style>
+    </div>
 
     <div class="p-4 flex justify-between items-center sticky top-0 bg-black z-50 border-b border-gray-900">
         <h1 class="text-red-600 text-3xl font-black italic">MOVIEFLIX</h1>
@@ -57,8 +75,8 @@
 
     <div id="uploadPage" class="page p-6">
         <h2 class="text-2xl font-bold mb-6 text-red-600">Upload Content</h2>
-        <input type="text" id="vLink" placeholder="Paste .mp4 Link" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none">
-        <input type="text" id="vTitle" placeholder="Video Title" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none">
+        <input type="text" id="vLink" placeholder="Paste .mp4 Link" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none text-white">
+        <input type="text" id="vTitle" placeholder="Video Title" class="w-full bg-gray-900 p-4 rounded-xl mb-4 border border-gray-700 outline-none text-white">
         <button onclick="uploadEverything()" class="w-full bg-red-600 py-4 rounded-xl font-bold">POST TO CHANNEL</button>
     </div>
 
@@ -70,14 +88,13 @@
                 <i class="fas fa-pen text-sm text-gray-500" onclick="toggleEditModal()"></i>
             </div>
         </div>
-        <h3 class="font-bold border-b border-gray-800 pb-2 mb-4 text-gray-400">Videos</h3>
         <div id="userVideos" class="grid grid-cols-3 gap-1"></div>
     </div>
 
-    <div id="editNameModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6">
+    <div id="editNameModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6 bg-black/90">
         <div class="bg-gray-900 p-6 rounded-2xl w-full border border-gray-700">
             <h3 class="text-lg font-bold mb-4">Update Channel Name</h3>
-            <input type="text" id="newNameInput" placeholder="Enter new name" class="w-full bg-black p-3 rounded mb-4 border border-gray-700 outline-none text-white">
+            <input type="text" id="newNameInput" placeholder="Enter name" class="w-full bg-black p-3 rounded mb-4 border border-gray-700 text-white outline-none">
             <div class="flex gap-2">
                 <button onclick="saveNewName()" class="flex-1 bg-red-600 py-2 rounded font-bold">Save</button>
                 <button onclick="toggleEditModal()" class="flex-1 bg-gray-700 py-2 rounded font-bold">Cancel</button>
@@ -87,7 +104,7 @@
 
     <div id="playerBox" class="fixed inset-0 bg-black z-[300] hidden flex flex-col">
         <button onclick="closeVideo()" class="p-4 text-red-600 font-bold">✕ CLOSE</button>
-        <video id="mainVideo" controls class="w-full my-auto shadow-2xl"><source src="" type="video/mp4"></video>
+        <video id="mainVideo" controls class="w-full my-auto"><source src="" type="video/mp4"></video>
     </div>
 
     <div class="fixed bottom-0 w-full bg-black border-t border-gray-900 flex justify-around items-center py-4 z-50">
@@ -98,13 +115,15 @@
     </div>
 
     <script>
+        // Splash Screen Timer
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2500);
+
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
         function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
-
         function toggleEditModal() { document.getElementById('editNameModal').classList.toggle('hidden'); }
 
         function saveNewName() {
@@ -116,9 +135,7 @@
             }
         }
 
-        function downloadVideo(url) {
-            window.open(url, '_blank');
-        }
+        function downloadVideo(url) { window.open(url, '_blank'); }
 
         function uploadEverything() {
             let url = document.getElementById('vLink').value;
@@ -133,7 +150,7 @@
             movieList.prepend(card);
             const userVids = document.getElementById('userVideos');
             const thumb = document.createElement('div');
-            thumb.className = "h-24 bg-gray-800 rounded flex items-center justify-center border border-gray-700";
+            thumb.className = "h-24 bg-gray-800 rounded border border-gray-700 flex items-center justify-center";
             thumb.onclick = () => playVideo(url);
             thumb.innerHTML = `<i class="fas fa-play opacity-20 text-xs"></i>`;
             userVids.prepend(thumb);
@@ -141,16 +158,8 @@
             showPage('channelPage');
         }
 
-        function playVideo(url) {
-            document.getElementById('mainVideo').src = url;
-            document.getElementById('playerBox').classList.remove('hidden');
-            document.getElementById('mainVideo').play();
-        }
-
-        function closeVideo() {
-            document.getElementById('playerBox').classList.add('hidden');
-            document.getElementById('mainVideo').pause();
-        }
+        function playVideo(url) { document.getElementById('mainVideo').src = url; document.getElementById('playerBox').classList.remove('hidden'); document.getElementById('mainVideo').play(); }
+        function closeVideo() { document.getElementById('playerBox').classList.add('hidden'); document.getElementById('mainVideo').pause(); }
 
         function realSearch() {
             let val = document.getElementById('searchInput').value.toLowerCase();
